@@ -1,5 +1,7 @@
+import KanbanPage from '@pages/KanbanPage'
+
 function App() {
-  return <div>Initial project</div>
+  return <KanbanPage />
 }
 
 export default App
