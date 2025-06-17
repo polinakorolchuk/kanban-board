@@ -66,17 +66,20 @@ export const boardSlice = createSlice({
       const newColor = getUnusedColor(usedColors)
 
       const newColumn: Column = {
-        id: `${Date.now()}`, // или crypto.randomUUID() если поддерживается
+        id: `${Date.now()}`,
         title: 'New Column',
         color: newColor,
         cards: []
       }
 
       state.columns.push(newColumn)
+    },
+    deleteColumn: (state, action) => {
+      state.columns = state.columns.filter((col) => col.id !== action.payload)
     }
   }
 })
 
 // Экспорт
-export const { addColumn } = boardSlice.actions
 export default boardSlice.reducer
+export const { addColumn, deleteColumn } = boardSlice.actions

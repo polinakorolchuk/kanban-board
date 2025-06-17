@@ -167,3 +167,46 @@ export const EditableTitle = styled.span`
   cursor: pointer;
   font-family: 'Plus Jakarta Sans', sans-serif;
 `
+export const DeleteColumnButton = styled.button`
+  background: none;
+  color: #ef4444;
+  padding: 4px 8px;
+  margin-top: 0.05rem;
+  align-self: flex-end;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  overflow: hidden;
+  transition: background-color 0.2s ease;
+
+  svg {
+    flex-shrink: 0;
+    transition: transform 0.3s ease;
+  }
+
+  .label {
+    max-width: 0;
+    opacity: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    transition:
+      max-width 0.3s ease,
+      opacity 0.3s ease;
+  }
+
+  &:hover {
+    background-color: #fee2e2;
+
+    .label {
+      max-width: 200px;
+      opacity: 1;
+    }
+
+    svg {
+      transform: translateX(-2px);
+    }
+  }
+`

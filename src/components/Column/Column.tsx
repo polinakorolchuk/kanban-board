@@ -1,5 +1,6 @@
 import Card from '@components/Card/Card'
 import AddIcon from '@components/Icons/AddIcon'
+import TrashIcon from '@components/Icons/TrashIcon'
 import { useEffect, useRef, useState } from 'react'
 
 import {
@@ -8,6 +9,7 @@ import {
   ColumnContent,
   ColumnTitle,
   ColumnWrapper,
+  DeleteColumnButton,
   EditableInput,
   EditableTitle,
   TaskCountBadge,
@@ -25,9 +27,10 @@ interface ColumnProps {
   title: string
   color: string
   cards?: CardType[]
+  onDelete?: () => void
 }
 
-const Column = ({ title, color, cards = [] }: ColumnProps) => {
+const Column = ({ title, color, cards = [], onDelete }: ColumnProps) => {
   const [isEditing, setIsEditing] = useState(false)
   const [editableTitle, setEditableTitle] = useState(title)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -46,18 +49,15 @@ const Column = ({ title, color, cards = [] }: ColumnProps) => {
 
   const handleBlur = () => {
     setIsEditing(false)
-    // TODO: диспатч в Redux при необходимости
   }
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       e.preventDefault()
       setIsEditing(false)
-      // TODO: диспатч в Redux при необходимости
     }
   }
 
-  // Устанавливаем фокус программно, как только включается режим редактирования
   useEffect(() => {
     if (isEditing && inputRef.current) {
       inputRef.current.focus()
@@ -70,7 +70,6 @@ const Column = ({ title, color, cards = [] }: ColumnProps) => {
         <ColumnTitle bgColor={color}>
           <TitleWithBadge>
             <TaskCountBadge bgColor={color}>{cards.length}</TaskCountBadge>
-
             {isEditing ? (
               <EditableInput
                 ref={inputRef}
@@ -97,6 +96,10 @@ const Column = ({ title, color, cards = [] }: ColumnProps) => {
         <AddTaskPlaceholder bgColor={color}>
           <span>+ Add task...</span>
         </AddTaskPlaceholder>
+        <DeleteColumnButton onClick={onDelete}>
+          <TrashIcon />
+          <span className="label">Delete column</span>
+        </DeleteColumnButton>
       </ColumnContent>
     </ColumnWrapper>
   )
