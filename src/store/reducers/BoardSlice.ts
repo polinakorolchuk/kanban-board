@@ -1,3 +1,4 @@
+import { COLUMN_COLORS } from '@constants/Colors'
 import { createSlice } from '@reduxjs/toolkit'
 
 // Типы
@@ -17,6 +18,15 @@ type Column = {
 
 interface BoardState {
   columns: Column[]
+}
+
+// Вспомогательная функция для получения неиспользованного цвета
+function getUnusedColor(usedColors: string[]): string {
+  const available = COLUMN_COLORS.filter((color) => !usedColors.includes(color))
+  if (available.length === 0) {
+    return COLUMN_COLORS[Math.floor(Math.random() * COLUMN_COLORS.length)]
+  }
+  return available[Math.floor(Math.random() * available.length)]
 }
 
 // Начальное состояние
@@ -51,14 +61,17 @@ export const boardSlice = createSlice({
   name: 'board',
   initialState,
   reducers: {
-    // Добавить колонку с дефолтным названием и цветом
     addColumn: (state) => {
+      const usedColors = state.columns.map((col) => col.color)
+      const newColor = getUnusedColor(usedColors)
+
       const newColumn: Column = {
-        id: `${Date.now()}`,
+        id: `${Date.now()}`, // или crypto.randomUUID() если поддерживается
         title: 'New Column',
-        color: '#CCCCCC',
+        color: newColor,
         cards: []
       }
+
       state.columns.push(newColumn)
     }
   }
