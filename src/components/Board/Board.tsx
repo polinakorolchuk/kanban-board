@@ -13,6 +13,7 @@ const Board = () => {
       {columns.map((column) => (
         <Column
           key={column.id}
+          columnId={column.id}
           title={column.title}
           color={column.color}
           cards={column.cards.map((card) => ({

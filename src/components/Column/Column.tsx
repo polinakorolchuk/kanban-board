@@ -1,3 +1,4 @@
+import AddCardForm from '@components/Card/AddCardForm'
 import Card from '@components/Card/Card'
 import AddIcon from '@components/Icons/AddIcon'
 import TrashIcon from '@components/Icons/TrashIcon'
@@ -24,20 +25,18 @@ interface CardType {
 }
 
 interface ColumnProps {
+  columnId: string
   title: string
   color: string
   cards?: CardType[]
   onDelete?: () => void
 }
 
-const Column = ({ title, color, cards = [], onDelete }: ColumnProps) => {
+const Column = ({ columnId, title, color, cards = [], onDelete }: ColumnProps) => {
   const [isEditing, setIsEditing] = useState(false)
   const [editableTitle, setEditableTitle] = useState(title)
+  const [isAddingCard, setIsAddingCard] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
-
-  const handleAddTask = () => {
-    alert(`Добавление задачи в колонку "${editableTitle}" ещё не реализовано.`)
-  }
 
   const handleTitleClick = () => {
     setIsEditing(true)
@@ -56,6 +55,14 @@ const Column = ({ title, color, cards = [], onDelete }: ColumnProps) => {
       e.preventDefault()
       setIsEditing(false)
     }
+  }
+
+  const handleAddTaskClick = () => {
+    setIsAddingCard(true)
+  }
+
+  const handleCancelAddCard = () => {
+    setIsAddingCard(false)
   }
 
   useEffect(() => {
@@ -84,7 +91,7 @@ const Column = ({ title, color, cards = [], onDelete }: ColumnProps) => {
             )}
           </TitleWithBadge>
 
-          <AddTaskButton bgColor={color} onClick={handleAddTask} aria-label="Добавить задачу">
+          <AddTaskButton bgColor={color} onClick={handleAddTaskClick} aria-label="Добавить задачу">
             <AddIcon />
           </AddTaskButton>
         </ColumnTitle>
@@ -93,9 +100,14 @@ const Column = ({ title, color, cards = [], onDelete }: ColumnProps) => {
           <Card key={card.id} {...card} />
         ))}
 
-        <AddTaskPlaceholder bgColor={color}>
-          <span>+ Add task...</span>
-        </AddTaskPlaceholder>
+        {isAddingCard ? (
+          <AddCardForm columnId={columnId} onCancel={handleCancelAddCard} />
+        ) : (
+          <AddTaskPlaceholder bgColor={color} onClick={handleAddTaskClick}>
+            <span>+ Add task...</span>
+          </AddTaskPlaceholder>
+        )}
+
         <DeleteColumnButton onClick={onDelete}>
           <TrashIcon />
           <span className="label">Delete column</span>
