@@ -1,26 +1,24 @@
 import Column from '@components/Column/Column'
+import { useAppSelector } from '@hooks/UseTypedHooks'
 
 import { BoardWrapper } from './styled'
 
 const Board = () => {
-  const todoCards = [
-    { id: 1, title: 'Task 1', description: 'Task description 1', priority: 'high' as const },
-    { id: 2, title: 'Task 2', description: 'Task description 2', priority: 'medium' as const }
-  ]
-
-  const inProgressCards = [
-    { id: 3, title: 'Task 3', description: 'Task description 3', priority: 'low' as const }
-  ]
-
-  const doneCards = [
-    { id: 4, title: 'Task 4', description: 'Task description 4', priority: 'medium' as const }
-  ]
+  const columns = useAppSelector((state) => state.board.columns)
 
   return (
     <BoardWrapper>
-      <Column title="To Do" color="#4F46E5" cards={todoCards} />
-      <Column title="In progress" color="#F59E0B" cards={inProgressCards} />
-      <Column title="Done" color="#22C55E" cards={doneCards} />
+      {columns.map((column) => (
+        <Column
+          key={column.id}
+          title={column.title}
+          color={column.color}
+          cards={column.cards.map((card) => ({
+            ...card,
+            priority: card.priority ?? 'low'
+          }))}
+        />
+      ))}
     </BoardWrapper>
   )
 }

@@ -1,4 +1,6 @@
 import Card from '@components/Card/Card'
+import AddIcon from '@components/Icons/AddIcon'
+import { useEffect, useRef, useState } from 'react'
 
 import {
   AddTaskButton,
@@ -6,6 +8,8 @@ import {
   ColumnContent,
   ColumnTitle,
   ColumnWrapper,
+  EditableInput,
+  EditableTitle,
   TaskCountBadge,
   TitleWithBadge
 } from './styled'
@@ -24,9 +28,41 @@ interface ColumnProps {
 }
 
 const Column = ({ title, color, cards = [] }: ColumnProps) => {
+  const [isEditing, setIsEditing] = useState(false)
+  const [editableTitle, setEditableTitle] = useState(title)
+  const inputRef = useRef<HTMLInputElement>(null)
+
   const handleAddTask = () => {
-    alert(`Добавление задачи в колонку "${title}" ещё не реализовано.`)
+    alert(`Добавление задачи в колонку "${editableTitle}" ещё не реализовано.`)
   }
+
+  const handleTitleClick = () => {
+    setIsEditing(true)
+  }
+
+  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEditableTitle(e.target.value)
+  }
+
+  const handleBlur = () => {
+    setIsEditing(false)
+    // TODO: диспатч в Redux при необходимости
+  }
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      e.preventDefault()
+      setIsEditing(false)
+      // TODO: диспатч в Redux при необходимости
+    }
+  }
+
+  // Устанавливаем фокус программно, как только включается режим редактирования
+  useEffect(() => {
+    if (isEditing && inputRef.current) {
+      inputRef.current.focus()
+    }
+  }, [isEditing])
 
   return (
     <ColumnWrapper>
@@ -34,19 +70,23 @@ const Column = ({ title, color, cards = [] }: ColumnProps) => {
         <ColumnTitle bgColor={color}>
           <TitleWithBadge>
             <TaskCountBadge bgColor={color}>{cards.length}</TaskCountBadge>
-            {title}
+
+            {isEditing ? (
+              <EditableInput
+                ref={inputRef}
+                type="text"
+                value={editableTitle}
+                onChange={handleTitleChange}
+                onBlur={handleBlur}
+                onKeyDown={handleKeyDown}
+              />
+            ) : (
+              <EditableTitle onClick={handleTitleClick}>{editableTitle}</EditableTitle>
+            )}
           </TitleWithBadge>
+
           <AddTaskButton bgColor={color} onClick={handleAddTask} aria-label="Добавить задачу">
-            <svg
-              width="30"
-              height="30"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <line x1="12" y1="5" x2="12" y2="19" stroke="white" strokeWidth="1.5" />
-              <line x1="5" y1="12" x2="19" y2="12" stroke="white" strokeWidth="1.5" />
-            </svg>
+            <AddIcon />
           </AddTaskButton>
         </ColumnTitle>
 

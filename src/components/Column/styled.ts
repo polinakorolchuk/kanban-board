@@ -154,3 +154,16 @@ export const AddTaskPlaceholder = styled.div<ColorProps>`
     font-family: 'Plus Jakarta Sans', sans-serif;
   }
 `
+export const EditableInput = styled.input`
+  font-size: 1rem;
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  width: 100%;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+`
+
+export const EditableTitle = styled.span`
+  cursor: pointer;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+`
