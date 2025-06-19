@@ -2,7 +2,7 @@ import { COLUMN_COLORS } from '@constants/Colors'
 import { createSlice } from '@reduxjs/toolkit'
 
 // Типы
-type Card = {
+export type Card = {
   id: number
   title: string
   description: string

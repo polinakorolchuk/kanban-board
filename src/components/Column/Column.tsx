@@ -21,7 +21,7 @@ interface CardType {
   id: number
   title: string
   description: string
-  priority: 'low' | 'medium' | 'high'
+  priority?: 'low' | 'medium' | 'high' // теперь не обязательный
 }
 
 interface ColumnProps {

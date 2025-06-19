@@ -16,10 +16,7 @@ const Board = () => {
           columnId={column.id}
           title={column.title}
           color={column.color}
-          cards={column.cards.map((card) => ({
-            ...card,
-            priority: card.priority ?? 'low'
-          }))}
+          cards={column.cards} // ← вот тут больше нет подстановки 'low'
           onDelete={() => dispatch(deleteColumn(column.id))}
         />
       ))}

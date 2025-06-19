@@ -25,7 +25,7 @@ const priorityColors = {
 
 const Card: React.FC<CardProps> = ({ title, description, priority }) => (
   <CardWrapper>
-    {priority && (
+    {priority && ['low', 'medium', 'high'].includes(priority) && (
       <PriorityBadge color={priorityColors[priority].text} bgColor={priorityColors[priority].bg}>
         {priority}
       </PriorityBadge>

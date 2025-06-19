@@ -33,7 +33,7 @@ export const CardTitle = styled.h3`
 export const CardDescription = styled.p`
   font-family: 'Plus Jakarta Sans', sans-serif;
   font-size: 0.875rem;
-  line-height: 1.5;
+  line-height: 1;
   color: #334155;
   margin: 0;
 `
@@ -50,4 +50,88 @@ export const PriorityBadge = styled.span<{ color: string; bgColor: string }>`
   width: fit-content;
   text-transform: capitalize;
   align-items: center;
+`
+
+export const FormActions = styled.div`
+  margin-top: 8px;
+  display: flex;
+  gap: 8px;
+`
+
+export const SubmitButton = styled.button`
+  padding: 6px 12px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background-color: #22c55e;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #16a34a;
+  }
+`
+
+export const CancelButton = styled.button`
+  padding: 6px 12px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background-color: #f87171;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #ef4444;
+  }
+`
+
+export const FormWrapper = styled.div`
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 12px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 8px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+`
+
+export const FormInput = styled.input`
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  font-size: 0.875rem;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+`
+
+export const FormTextarea = styled.textarea`
+  width: 98%;
+  padding: 2px;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  font-size: 0.875rem;
+  resize: vertical;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+`
+
+export const FormSelect = styled.select`
+  padding: 8px 2.5rem 8px 8px; /* Увеличен правый padding для отступа от стрелки */
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  font-size: 0.875rem;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background-color: #f8fafc;
+  color: #1f2937;
+  appearance: none;
+
+  background-image: url("data:image/svg+xml,%3Csvg fill='none' stroke='gray' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 1rem;
 `
