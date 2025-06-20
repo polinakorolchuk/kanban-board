@@ -1,5 +1,5 @@
-import { addCard, Card } from '@store/reducers/BoardSlice'
-import React, { useState } from 'react'
+import { addCard, Card, updateCard } from '@store/reducers/BoardSlice'
+import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 
 import {
@@ -15,35 +15,62 @@ import {
 interface AddCardFormProps {
   columnId: string
   onCancel?: () => void
+  initialData?: Card
+  onSave?: () => void
 }
 
-const AddCardForm: React.FC<AddCardFormProps> = ({ columnId, onCancel }) => {
+const AddCardForm: React.FC<AddCardFormProps> = ({ columnId, onCancel, initialData, onSave }) => {
   const dispatch = useDispatch()
+
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [priority, setPriority] = useState<'low' | 'medium' | 'high' | ''>('')
+
+  const isEditMode = Boolean(initialData)
+
+  useEffect(() => {
+    if (initialData) {
+      setTitle(initialData.title)
+      setDescription(initialData.description)
+      setPriority(initialData.priority || '')
+    }
+  }, [initialData])
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (!title.trim()) return
 
-    const newCard: Card = {
-      id: Date.now(),
-      title,
-      description
-    }
+    if (isEditMode && initialData) {
+      dispatch(
+        updateCard({
+          columnId,
+          cardId: initialData.id,
+          updatedCard: {
+            title,
+            description,
+            priority: priority || undefined
+          }
+        })
+      )
+      if (onSave) onSave()
+    } else {
+      const newCard: Card = {
+        id: Date.now(),
+        title,
+        description
+      }
 
-    // Добавим priority только если оно выбрано
-    if (priority !== '') {
-      newCard.priority = priority
-    }
+      if (priority !== '') {
+        newCard.priority = priority
+      }
 
-    dispatch(
-      addCard({
-        columnId,
-        card: newCard
-      })
-    )
+      dispatch(
+        addCard({
+          columnId,
+          card: newCard
+        })
+      )
+    }
 
     setTitle('')
     setDescription('')
@@ -81,7 +108,7 @@ const AddCardForm: React.FC<AddCardFormProps> = ({ columnId, onCancel }) => {
       </div>
 
       <FormActions>
-        <SubmitButton type="submit">Add</SubmitButton>
+        <SubmitButton type="submit">{isEditMode ? 'Save' : 'Add'}</SubmitButton>
         {onCancel && (
           <CancelButton type="button" onClick={onCancel}>
             Cancel

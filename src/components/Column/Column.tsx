@@ -3,7 +3,7 @@ import Card from '@components/Card/Card'
 import AddIcon from '@components/Icons/AddIcon'
 import TrashIcon from '@components/Icons/TrashIcon'
 import { useAppDispatch } from '@hooks/UseTypedHooks'
-import { moveCard } from '@store/reducers/BoardSlice'
+import { deleteCard, moveCard } from '@store/reducers/BoardSlice'
 import { useEffect, useRef, useState } from 'react'
 
 import {
@@ -38,6 +38,7 @@ const Column = ({ columnId, title, color, cards = [], onDelete }: ColumnProps) =
   const [isEditing, setIsEditing] = useState(false)
   const [editableTitle, setEditableTitle] = useState(title)
   const [isAddingCard, setIsAddingCard] = useState(false)
+  const [editingCardId, setEditingCardId] = useState<number | null>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
   const dispatch = useAppDispatch()
@@ -69,6 +70,18 @@ const Column = ({ columnId, title, color, cards = [], onDelete }: ColumnProps) =
     setIsAddingCard(false)
   }
 
+  const handleEditCard = (cardId: number) => {
+    setEditingCardId(cardId)
+  }
+
+  const handleCancelEditCard = () => {
+    setEditingCardId(null)
+  }
+
+  const handleDeleteCard = (cardId: number) => {
+    dispatch(deleteCard({ columnId, cardId }))
+  }
+
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault()
   }
@@ -90,7 +103,7 @@ const Column = ({ columnId, title, color, cards = [], onDelete }: ColumnProps) =
   }, [isEditing])
 
   return (
-    <ColumnWrapper onDrop={handleDrop} onDragOver={handleDragOver}>
+    <ColumnWrapper onDrop={handleDrop} onDragOver={handleDragOver} data-column-id={columnId}>
       <ColumnContent>
         <ColumnTitle bgColor={color}>
           <TitleWithBadge>
@@ -114,9 +127,25 @@ const Column = ({ columnId, title, color, cards = [], onDelete }: ColumnProps) =
           </AddTaskButton>
         </ColumnTitle>
 
-        {cards.map((card) => (
-          <Card key={card.id} {...card} columnId={columnId} />
-        ))}
+        {cards.map((card) =>
+          editingCardId === card.id ? (
+            <AddCardForm
+              key={card.id}
+              columnId={columnId}
+              initialData={card}
+              onCancel={handleCancelEditCard}
+              onSave={() => setEditingCardId(null)}
+            />
+          ) : (
+            <Card
+              key={card.id}
+              {...card}
+              columnId={columnId}
+              onEdit={() => handleEditCard(card.id)}
+              onDelete={() => handleDeleteCard(card.id)}
+            />
+          )
+        )}
 
         {isAddingCard ? (
           <AddCardForm columnId={columnId} onCancel={handleCancelAddCard} />

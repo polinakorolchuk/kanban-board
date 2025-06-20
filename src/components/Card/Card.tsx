@@ -1,13 +1,23 @@
-import React from 'react'
+import React, { useState } from 'react'
 
-import { CardDescription, CardTitle, CardWrapper, PriorityBadge } from './styled'
+import {
+  CardActionButton,
+  CardActions,
+  CardDescription,
+  CardTitle,
+  CardWrapper,
+  PriorityBadge
+} from './styled'
 
 interface CardProps {
   id: number
+  columnId: string
   title: string
   description: string
   priority?: 'low' | 'medium' | 'high'
-  columnId: string
+  onEdit?: () => void
+  onDelete?: () => void
+  onMouseDown?: (e: React.MouseEvent) => void
 }
 
 const priorityColors = {
@@ -16,21 +26,37 @@ const priorityColors = {
   high: { text: '#F43F5E', bg: 'rgba(244, 63, 94, 0.1)' }
 }
 
-const Card: React.FC<CardProps> = ({ id, title, description, priority, columnId }) => {
-  const handleDragStart = (e: React.DragEvent<HTMLDivElement>) => {
-    e.dataTransfer.setData('cardId', id.toString())
-    e.dataTransfer.setData('sourceColumnId', columnId)
-  }
+const Card: React.FC<CardProps> = ({
+  title,
+  description,
+  priority,
+  onEdit,
+  onDelete,
+  onMouseDown
+}) => {
+  const [isHovered, setIsHovered] = useState(false)
 
   return (
-    <CardWrapper draggable onDragStart={handleDragStart}>
-      {priority && ['low', 'medium', 'high'].includes(priority) && (
+    <CardWrapper
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      onMouseDown={onMouseDown}
+    >
+      {priority && (
         <PriorityBadge color={priorityColors[priority].text} bgColor={priorityColors[priority].bg}>
           {priority}
         </PriorityBadge>
       )}
+
       <CardTitle>{title}</CardTitle>
       <CardDescription>{description}</CardDescription>
+
+      {isHovered && (
+        <CardActions>
+          <CardActionButton onClick={onEdit}>✏️</CardActionButton>
+          <CardActionButton onClick={onDelete}>🗑</CardActionButton>
+        </CardActions>
+      )}
     </CardWrapper>
   )
 }

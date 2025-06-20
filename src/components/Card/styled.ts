@@ -1,6 +1,8 @@
 import styled from 'styled-components'
 
 export const CardWrapper = styled.div`
+  position: relative; /* ← ЭТО ГЛАВНОЕ */
+
   width: 270px;
   height: 135px;
   padding: 12px;
@@ -19,6 +21,25 @@ export const CardWrapper = styled.div`
   @media (max-width: 390px) {
     width: 100%;
     max-width: 100%;
+  }
+`
+
+export const CardActions = styled.div`
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: flex;
+  gap: 4px;
+`
+
+export const CardActionButton = styled.button`
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+
+  &:hover {
+    opacity: 0.7;
   }
 `
 
