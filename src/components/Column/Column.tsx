@@ -2,6 +2,8 @@ import AddCardForm from '@components/Card/AddCardForm'
 import Card from '@components/Card/Card'
 import AddIcon from '@components/Icons/AddIcon'
 import TrashIcon from '@components/Icons/TrashIcon'
+import { useAppDispatch } from '@hooks/UseTypedHooks'
+import { moveCard } from '@store/reducers/BoardSlice'
 import { useEffect, useRef, useState } from 'react'
 
 import {
@@ -21,7 +23,7 @@ interface CardType {
   id: number
   title: string
   description: string
-  priority?: 'low' | 'medium' | 'high' // теперь не обязательный
+  priority?: 'low' | 'medium' | 'high'
 }
 
 interface ColumnProps {
@@ -37,6 +39,8 @@ const Column = ({ columnId, title, color, cards = [], onDelete }: ColumnProps) =
   const [editableTitle, setEditableTitle] = useState(title)
   const [isAddingCard, setIsAddingCard] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
+
+  const dispatch = useAppDispatch()
 
   const handleTitleClick = () => {
     setIsEditing(true)
@@ -65,6 +69,20 @@ const Column = ({ columnId, title, color, cards = [], onDelete }: ColumnProps) =
     setIsAddingCard(false)
   }
 
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault()
+  }
+
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault()
+    const cardId = Number(e.dataTransfer.getData('cardId'))
+    const sourceColumnId = e.dataTransfer.getData('sourceColumnId')
+
+    if (sourceColumnId && cardId && sourceColumnId !== columnId) {
+      dispatch(moveCard({ sourceColumnId, targetColumnId: columnId, cardId }))
+    }
+  }
+
   useEffect(() => {
     if (isEditing && inputRef.current) {
       inputRef.current.focus()
@@ -72,7 +90,7 @@ const Column = ({ columnId, title, color, cards = [], onDelete }: ColumnProps) =
   }, [isEditing])
 
   return (
-    <ColumnWrapper>
+    <ColumnWrapper onDrop={handleDrop} onDragOver={handleDragOver}>
       <ColumnContent>
         <ColumnTitle bgColor={color}>
           <TitleWithBadge>
@@ -97,7 +115,7 @@ const Column = ({ columnId, title, color, cards = [], onDelete }: ColumnProps) =
         </ColumnTitle>
 
         {cards.map((card) => (
-          <Card key={card.id} {...card} />
+          <Card key={card.id} {...card} columnId={columnId} />
         ))}
 
         {isAddingCard ? (

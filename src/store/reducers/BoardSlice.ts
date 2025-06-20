@@ -100,10 +100,25 @@ export const boardSlice = createSlice({
       if (column) {
         column.cards = column.cards.filter((c) => c.id !== cardId)
       }
+    },
+    moveCard: (state, action) => {
+      const { sourceColumnId, targetColumnId, cardId } = action.payload
+      if (sourceColumnId === targetColumnId) return
+
+      const sourceColumn = state.columns.find((col) => col.id === sourceColumnId)
+      const targetColumn = state.columns.find((col) => col.id === targetColumnId)
+      if (!sourceColumn || !targetColumn) return
+
+      const cardIndex = sourceColumn.cards.findIndex((c) => c.id === cardId)
+      if (cardIndex === -1) return
+
+      const [movedCard] = sourceColumn.cards.splice(cardIndex, 1)
+      targetColumn.cards.push(movedCard)
     }
   }
 })
 
 // Экспорт
 export default boardSlice.reducer
-export const { addColumn, deleteColumn, addCard, updateCard, deleteCard } = boardSlice.actions
+export const { addColumn, deleteColumn, addCard, updateCard, deleteCard, moveCard } =
+  boardSlice.actions
