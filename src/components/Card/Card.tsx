@@ -1,3 +1,5 @@
+import EditIcon from '@components/Icons/EditIcon'
+import TrashIcon from '@components/Icons/TrashIcon'
 import React, { useState } from 'react'
 
 import {
@@ -53,8 +55,14 @@ const Card: React.FC<CardProps> = ({
 
       {isHovered && (
         <CardActions>
-          <CardActionButton onClick={onEdit}>✏️</CardActionButton>
-          <CardActionButton onClick={onDelete}>🗑</CardActionButton>
+          <CardActionButton onClick={onEdit} variant="edit" aria-label="Edit">
+            <EditIcon />
+            <span className="label">Edit card</span>
+          </CardActionButton>
+          <CardActionButton onClick={onDelete} variant="delete" aria-label="Delete">
+            <TrashIcon />
+            <span className="label">Delete card</span>
+          </CardActionButton>
         </CardActions>
       )}
     </CardWrapper>

@@ -23,7 +23,6 @@ export const CardWrapper = styled.div`
     max-width: 100%;
   }
 `
-
 export const CardActions = styled.div`
   position: absolute;
   top: 8px;
@@ -32,14 +31,60 @@ export const CardActions = styled.div`
   gap: 4px;
 `
 
-export const CardActionButton = styled.button`
-  background: transparent;
+export const CardActionButton = styled.button<{ variant?: 'edit' | 'delete' }>`
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background: none;
   border: none;
   cursor: pointer;
-  font-size: 16px;
+  padding: 4px 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  overflow: hidden;
+  border-radius: 6px;
+  transition: background-color 0.2s ease;
+
+  svg {
+    flex-shrink: 0;
+    transition:
+      transform 0.3s ease,
+      color 0.3s ease;
+    color: ${({ variant }) =>
+      variant === 'delete' ? '#ef4444' : variant === 'edit' ? '#6366f1' : '#64748b'};
+  }
+
+  .label {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 0.775rem;
+    font-weight: 500;
+    color: ${({ variant }) =>
+      variant === 'delete' ? '#b91c1c' : variant === 'edit' ? '#3730a3' : '#1e293b'};
+
+    max-width: 0;
+    opacity: 0;
+    white-space: nowrap;
+    overflow: hidden;
+
+    transition:
+      max-width 0.3s ease,
+      opacity 0.3s ease,
+      color 0.3s ease;
+  }
 
   &:hover {
-    opacity: 0.7;
+    background-color: ${({ variant }) =>
+      variant === 'delete' ? '#fee2e2' : variant === 'edit' ? '#e0e7ff' : 'transparent'};
+
+    svg {
+      transform: translateX(-2px);
+      color: ${({ variant }) =>
+        variant === 'delete' ? '#b91c1c' : variant === 'edit' ? '#3730a3' : '#1e293b'};
+    }
+
+    .label {
+      max-width: 100px;
+      opacity: 1;
+    }
   }
 `
 
