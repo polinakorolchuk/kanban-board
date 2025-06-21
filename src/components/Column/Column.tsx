@@ -82,6 +82,16 @@ const Column = ({ columnId, title, color, cards = [], onDelete }: ColumnProps) =
     dispatch(deleteCard({ columnId, cardId }))
   }
 
+  const handleDragStart = (
+    e: React.DragEvent<HTMLDivElement>,
+    cardId: number,
+    sourceColumnId: string
+  ) => {
+    e.dataTransfer.setData('cardId', cardId.toString())
+    e.dataTransfer.setData('sourceColumnId', sourceColumnId)
+    e.dataTransfer.effectAllowed = 'move'
+  }
+
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault()
   }
@@ -137,13 +147,14 @@ const Column = ({ columnId, title, color, cards = [], onDelete }: ColumnProps) =
               onSave={() => setEditingCardId(null)}
             />
           ) : (
-            <Card
-              key={card.id}
-              {...card}
-              columnId={columnId}
-              onEdit={() => handleEditCard(card.id)}
-              onDelete={() => handleDeleteCard(card.id)}
-            />
+            <div key={card.id} draggable onDragStart={(e) => handleDragStart(e, card.id, columnId)}>
+              <Card
+                {...card}
+                columnId={columnId}
+                onEdit={() => handleEditCard(card.id)}
+                onDelete={() => handleDeleteCard(card.id)}
+              />
+            </div>
           )
         )}
 

@@ -20,6 +20,7 @@ interface CardProps {
   onEdit?: () => void
   onDelete?: () => void
   onMouseDown?: (e: React.MouseEvent) => void
+  onDragStart?: (e: React.DragEvent<HTMLDivElement>) => void
 }
 
 const priorityColors = {
@@ -34,7 +35,8 @@ const Card: React.FC<CardProps> = ({
   priority,
   onEdit,
   onDelete,
-  onMouseDown
+  onMouseDown,
+  onDragStart // добавлено
 }) => {
   const [isHovered, setIsHovered] = useState(false)
 
@@ -43,6 +45,7 @@ const Card: React.FC<CardProps> = ({
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onMouseDown={onMouseDown}
+      onDragStart={onDragStart} // добавлено
     >
       {priority && (
         <PriorityBadge color={priorityColors[priority].text} bgColor={priorityColors[priority].bg}>
