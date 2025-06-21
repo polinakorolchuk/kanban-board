@@ -3,7 +3,7 @@ import Card from '@components/Card/Card'
 import AddIcon from '@components/Icons/AddIcon'
 import TrashIcon from '@components/Icons/TrashIcon'
 import { useAppDispatch } from '@hooks/UseTypedHooks'
-import { deleteCard, moveCard } from '@store/reducers/BoardSlice'
+import { deleteCard, moveCard, updateColumnTitle } from '@store/reducers/BoardSlice'
 import { useEffect, useRef, useState } from 'react'
 
 import {
@@ -51,14 +51,21 @@ const Column = ({ columnId, title, color, cards = [], onDelete }: ColumnProps) =
     setEditableTitle(e.target.value)
   }
 
-  const handleBlur = () => {
+  const finishEditingTitle = () => {
     setIsEditing(false)
+    if (editableTitle.trim() && editableTitle !== title) {
+      dispatch(updateColumnTitle({ columnId, newTitle: editableTitle.trim() }))
+    }
+  }
+
+  const handleBlur = () => {
+    finishEditingTitle()
   }
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       e.preventDefault()
-      setIsEditing(false)
+      finishEditingTitle()
     }
   }
 

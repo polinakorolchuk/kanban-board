@@ -1,7 +1,6 @@
 import { COLUMN_COLORS } from '@constants/Colors'
 import { createSlice } from '@reduxjs/toolkit'
 
-// Типы
 export type Card = {
   id: number
   title: string
@@ -20,7 +19,6 @@ interface BoardState {
   columns: Column[]
 }
 
-// Вспомогательная функция для получения неиспользованного цвета
 function getUnusedColor(usedColors: string[]): string {
   const available = COLUMN_COLORS.filter((color) => !usedColors.includes(color))
   if (available.length === 0) {
@@ -29,7 +27,6 @@ function getUnusedColor(usedColors: string[]): string {
   return available[Math.floor(Math.random() * available.length)]
 }
 
-// Начальное состояние
 const initialState: BoardState = {
   columns: [
     {
@@ -56,7 +53,6 @@ const initialState: BoardState = {
   ]
 }
 
-// Slice
 export const boardSlice = createSlice({
   name: 'board',
   initialState,
@@ -74,9 +70,19 @@ export const boardSlice = createSlice({
 
       state.columns.push(newColumn)
     },
+
+    updateColumnTitle: (state, action) => {
+      const { columnId, newTitle } = action.payload
+      const column = state.columns.find((col) => col.id === columnId)
+      if (column) {
+        column.title = newTitle
+      }
+    },
+
     deleteColumn: (state, action) => {
       state.columns = state.columns.filter((col) => col.id !== action.payload)
     },
+
     addCard: (state, action) => {
       const { columnId, card } = action.payload
       const column = state.columns.find((col) => col.id === columnId)
@@ -84,6 +90,7 @@ export const boardSlice = createSlice({
         column.cards.push(card)
       }
     },
+
     updateCard: (state, action) => {
       const { columnId, cardId, updatedCard } = action.payload
       const column = state.columns.find((col) => col.id === columnId)
@@ -94,6 +101,7 @@ export const boardSlice = createSlice({
         }
       }
     },
+
     deleteCard: (state, action) => {
       const { columnId, cardId } = action.payload
       const column = state.columns.find((col) => col.id === columnId)
@@ -101,6 +109,7 @@ export const boardSlice = createSlice({
         column.cards = column.cards.filter((c) => c.id !== cardId)
       }
     },
+
     moveCard: (state, action) => {
       const { sourceColumnId, targetColumnId, cardId } = action.payload
       if (sourceColumnId === targetColumnId) return
@@ -118,7 +127,13 @@ export const boardSlice = createSlice({
   }
 })
 
-// Экспорт
 export default boardSlice.reducer
-export const { addColumn, deleteColumn, addCard, updateCard, deleteCard, moveCard } =
-  boardSlice.actions
+export const {
+  addColumn,
+  deleteColumn,
+  addCard,
+  updateCard,
+  deleteCard,
+  moveCard,
+  updateColumnTitle // ← экспортируем новый редьюсер
+} = boardSlice.actions
