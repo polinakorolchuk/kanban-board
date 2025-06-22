@@ -1,16 +1,19 @@
+import ErrorBoundary from '@components/ErrorBoundary/ErrorBoundary'
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { Provider } from 'react-redux'
 import { PersistGate } from 'redux-persist/integration/react'
 
 import App from './App'
-import { persistor, store } from './store' // импортируем persistor
+import { persistor, store } from './store'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <App />
+        <ErrorBoundary>
+          <App />
+        </ErrorBoundary>
       </PersistGate>
     </Provider>
   </StrictMode>
