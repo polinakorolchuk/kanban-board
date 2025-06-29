@@ -1,14 +1,27 @@
 import styled from 'styled-components'
 
+export const CardActions = styled.div`
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: flex;
+  gap: 4px;
+
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+`
+
 export const CardWrapper = styled.div`
   position: relative;
-
   width: 270px;
   height: 135px;
   padding: 12px;
   border-radius: 24px;
-  border: 1px solid #e2e8f0;
-  background-color: white;
+
+  background-color: ${({ theme }) => theme.cardBackground};
+  border: 1px solid ${({ theme }) => theme.cardBorder};
+  color: ${({ theme }) => theme.text};
 
   display: flex;
   flex-direction: column;
@@ -22,14 +35,11 @@ export const CardWrapper = styled.div`
     width: 100%;
     max-width: 100%;
   }
-`
 
-export const CardActions = styled.div`
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  display: flex;
-  gap: 4px;
+  &:hover ${CardActions} {
+    opacity: 1;
+    pointer-events: auto;
+  }
 `
 
 export const CardActionButton = styled.button<{ variant?: 'edit' | 'delete' }>`

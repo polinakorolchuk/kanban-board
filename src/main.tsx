@@ -1,4 +1,5 @@
 import ErrorBoundary from '@components/ErrorBoundary/ErrorBoundary'
+import { ThemeProvider } from '@context/ThemeProvider'
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { Provider } from 'react-redux'
@@ -11,9 +12,11 @@ createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <ErrorBoundary>
-          <App />
-        </ErrorBoundary>
+        <ThemeProvider>
+          <ErrorBoundary>
+            <App />
+          </ErrorBoundary>
+        </ThemeProvider>
       </PersistGate>
     </Provider>
   </StrictMode>

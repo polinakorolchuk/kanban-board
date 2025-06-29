@@ -16,7 +16,8 @@
     "@constants/*": ["constants/*"],
     "@pages/*": ["pages/*"],
     "@utils/*": ["utils/*"],
-    "@assets/*": ["assets/*"]
+    "@assets/*": ["assets/*"],
+    "@context/*": ["context/*"]
   },
 
   /* Bundler mode */
