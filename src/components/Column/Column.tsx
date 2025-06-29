@@ -34,6 +34,9 @@ interface ColumnProps {
   onDelete?: () => void
 }
 
+let draggedCardId: number | null = null
+let draggedSourceColumnId: string | null = null
+
 const Column = ({ columnId, title, color, cards = [], onDelete }: ColumnProps) => {
   const [isEditing, setIsEditing] = useState(false)
   const [editableTitle, setEditableTitle] = useState(title)
@@ -43,9 +46,7 @@ const Column = ({ columnId, title, color, cards = [], onDelete }: ColumnProps) =
 
   const dispatch = useAppDispatch()
 
-  const handleTitleClick = () => {
-    setIsEditing(true)
-  }
+  const handleTitleClick = () => setIsEditing(true)
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEditableTitle(e.target.value)
@@ -58,9 +59,7 @@ const Column = ({ columnId, title, color, cards = [], onDelete }: ColumnProps) =
     }
   }
 
-  const handleBlur = () => {
-    finishEditingTitle()
-  }
+  const handleBlur = () => finishEditingTitle()
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
@@ -69,21 +68,13 @@ const Column = ({ columnId, title, color, cards = [], onDelete }: ColumnProps) =
     }
   }
 
-  const handleAddTaskClick = () => {
-    setIsAddingCard(true)
-  }
+  const handleAddTaskClick = () => setIsAddingCard(true)
 
-  const handleCancelAddCard = () => {
-    setIsAddingCard(false)
-  }
+  const handleCancelAddCard = () => setIsAddingCard(false)
 
-  const handleEditCard = (cardId: number) => {
-    setEditingCardId(cardId)
-  }
+  const handleEditCard = (cardId: number) => setEditingCardId(cardId)
 
-  const handleCancelEditCard = () => {
-    setEditingCardId(null)
-  }
+  const handleCancelEditCard = () => setEditingCardId(null)
 
   const handleDeleteCard = (cardId: number) => {
     dispatch(deleteCard({ columnId, cardId }))
@@ -94,6 +85,8 @@ const Column = ({ columnId, title, color, cards = [], onDelete }: ColumnProps) =
     cardId: number,
     sourceColumnId: string
   ) => {
+    draggedCardId = cardId
+    draggedSourceColumnId = sourceColumnId
     e.dataTransfer.setData('cardId', cardId.toString())
     e.dataTransfer.setData('sourceColumnId', sourceColumnId)
     e.dataTransfer.effectAllowed = 'move'
@@ -113,6 +106,39 @@ const Column = ({ columnId, title, color, cards = [], onDelete }: ColumnProps) =
     }
   }
 
+  const handleTouchStart = (
+    _: React.TouchEvent<HTMLDivElement>, // '_' вместо 'e' — чтобы избежать ошибки TS
+    cardId: number,
+    sourceColumnId: string
+  ) => {
+    draggedCardId = cardId
+    draggedSourceColumnId = sourceColumnId
+  }
+
+  const handleTouchEnd = (e: React.TouchEvent<HTMLDivElement>) => {
+    const touch = e.changedTouches[0]
+    const targetElem = document.elementFromPoint(touch.clientX, touch.clientY)
+    const targetColumn = targetElem?.closest('[data-column-id]')?.getAttribute('data-column-id')
+
+    if (
+      draggedCardId !== null &&
+      draggedSourceColumnId &&
+      targetColumn &&
+      draggedSourceColumnId !== targetColumn
+    ) {
+      dispatch(
+        moveCard({
+          sourceColumnId: draggedSourceColumnId,
+          targetColumnId: targetColumn,
+          cardId: draggedCardId
+        })
+      )
+    }
+
+    draggedCardId = null
+    draggedSourceColumnId = null
+  }
+
   useEffect(() => {
     if (isEditing && inputRef.current) {
       inputRef.current.focus()
@@ -120,7 +146,12 @@ const Column = ({ columnId, title, color, cards = [], onDelete }: ColumnProps) =
   }, [isEditing])
 
   return (
-    <ColumnWrapper onDrop={handleDrop} onDragOver={handleDragOver} data-column-id={columnId}>
+    <ColumnWrapper
+      onDrop={handleDrop}
+      onDragOver={handleDragOver}
+      onTouchEnd={handleTouchEnd}
+      data-column-id={columnId}
+    >
       <ColumnContent>
         <ColumnTitle bgColor={color}>
           <TitleWithBadge>
@@ -154,7 +185,12 @@ const Column = ({ columnId, title, color, cards = [], onDelete }: ColumnProps) =
               onSave={() => setEditingCardId(null)}
             />
           ) : (
-            <div key={card.id} draggable onDragStart={(e) => handleDragStart(e, card.id, columnId)}>
+            <div
+              key={card.id}
+              draggable
+              onDragStart={(e) => handleDragStart(e, card.id, columnId)}
+              onTouchStart={(e) => handleTouchStart(e, card.id, columnId)}
+            >
               <Card
                 {...card}
                 columnId={columnId}

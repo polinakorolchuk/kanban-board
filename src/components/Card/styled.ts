@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 
 export const CardWrapper = styled.div`
-  position: relative; /* ← ЭТО ГЛАВНОЕ */
+  position: relative;
 
   width: 270px;
   height: 135px;
@@ -23,6 +23,7 @@ export const CardWrapper = styled.div`
     max-width: 100%;
   }
 `
+
 export const CardActions = styled.div`
   position: absolute;
   top: 8px;
@@ -118,6 +119,52 @@ export const PriorityBadge = styled.span<{ color: string; bgColor: string }>`
   align-items: center;
 `
 
+export const FormWrapper = styled.div`
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 12px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 8px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+`
+
+export const FormInput = styled.input`
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  font-size: 0.875rem;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+`
+
+export const FormTextarea = styled.textarea`
+  width: 98%;
+  padding: 2px;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  font-size: 0.875rem;
+  resize: vertical;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+`
+
+export const FormSelect = styled.select`
+  padding: 8px 2.5rem 8px 8px;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  font-size: 0.875rem;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background-color: #f8fafc;
+  color: #1f2937;
+  appearance: none;
+
+  background-image: url("data:image/svg+xml,%3Csvg fill='none' stroke='gray' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 1rem;
+`
+
 export const FormActions = styled.div`
   margin-top: 8px;
   display: flex;
@@ -154,50 +201,4 @@ export const CancelButton = styled.button`
   &:hover {
     background-color: #ef4444;
   }
-`
-
-export const FormWrapper = styled.div`
-  background-color: #ffffff;
-  border-radius: 12px;
-  padding: 12px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin-top: 8px;
-  font-family: 'Plus Jakarta Sans', sans-serif;
-`
-
-export const FormInput = styled.input`
-  padding: 8px;
-  border-radius: 6px;
-  border: 1px solid #d1d5db;
-  font-size: 0.875rem;
-  font-family: 'Plus Jakarta Sans', sans-serif;
-`
-
-export const FormTextarea = styled.textarea`
-  width: 98%;
-  padding: 2px;
-  border-radius: 6px;
-  border: 1px solid #d1d5db;
-  font-size: 0.875rem;
-  resize: vertical;
-  font-family: 'Plus Jakarta Sans', sans-serif;
-`
-
-export const FormSelect = styled.select`
-  padding: 8px 2.5rem 8px 8px; /* Увеличен правый padding для отступа от стрелки */
-  border-radius: 6px;
-  border: 1px solid #d1d5db;
-  font-size: 0.875rem;
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  background-color: #f8fafc;
-  color: #1f2937;
-  appearance: none;
-
-  background-image: url("data:image/svg+xml,%3Csvg fill='none' stroke='gray' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 0.75rem center;
-  background-size: 1rem;
 `

@@ -1,5 +1,5 @@
 import { COLUMN_COLORS } from '@constants/Colors'
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 export type Card = {
   id: number
@@ -71,7 +71,7 @@ export const boardSlice = createSlice({
       state.columns.push(newColumn)
     },
 
-    updateColumnTitle: (state, action) => {
+    updateColumnTitle: (state, action: PayloadAction<{ columnId: string; newTitle: string }>) => {
       const { columnId, newTitle } = action.payload
       const column = state.columns.find((col) => col.id === columnId)
       if (column) {
@@ -79,11 +79,11 @@ export const boardSlice = createSlice({
       }
     },
 
-    deleteColumn: (state, action) => {
+    deleteColumn: (state, action: PayloadAction<string>) => {
       state.columns = state.columns.filter((col) => col.id !== action.payload)
     },
 
-    addCard: (state, action) => {
+    addCard: (state, action: PayloadAction<{ columnId: string; card: Card }>) => {
       const { columnId, card } = action.payload
       const column = state.columns.find((col) => col.id === columnId)
       if (column) {
@@ -91,7 +91,10 @@ export const boardSlice = createSlice({
       }
     },
 
-    updateCard: (state, action) => {
+    updateCard: (
+      state,
+      action: PayloadAction<{ columnId: string; cardId: number; updatedCard: Partial<Card> }>
+    ) => {
       const { columnId, cardId, updatedCard } = action.payload
       const column = state.columns.find((col) => col.id === columnId)
       if (column) {
@@ -102,7 +105,7 @@ export const boardSlice = createSlice({
       }
     },
 
-    deleteCard: (state, action) => {
+    deleteCard: (state, action: PayloadAction<{ columnId: string; cardId: number }>) => {
       const { columnId, cardId } = action.payload
       const column = state.columns.find((col) => col.id === columnId)
       if (column) {
@@ -110,10 +113,16 @@ export const boardSlice = createSlice({
       }
     },
 
-    moveCard: (state, action) => {
-      const { sourceColumnId, targetColumnId, cardId } = action.payload
-      if (sourceColumnId === targetColumnId) return
-
+    moveCard: (
+      state,
+      action: PayloadAction<{
+        sourceColumnId: string
+        targetColumnId: string
+        cardId: number
+        targetIndex?: number
+      }>
+    ) => {
+      const { sourceColumnId, targetColumnId, cardId, targetIndex } = action.payload
       const sourceColumn = state.columns.find((col) => col.id === sourceColumnId)
       const targetColumn = state.columns.find((col) => col.id === targetColumnId)
       if (!sourceColumn || !targetColumn) return
@@ -122,7 +131,18 @@ export const boardSlice = createSlice({
       if (cardIndex === -1) return
 
       const [movedCard] = sourceColumn.cards.splice(cardIndex, 1)
-      targetColumn.cards.push(movedCard)
+
+      if (sourceColumnId === targetColumnId && typeof targetIndex === 'number') {
+        let insertIndex = targetIndex
+        if (targetIndex > cardIndex) {
+          insertIndex = targetIndex - 1
+        }
+        targetColumn.cards.splice(insertIndex, 0, movedCard)
+      } else if (typeof targetIndex === 'number') {
+        targetColumn.cards.splice(targetIndex, 0, movedCard)
+      } else {
+        targetColumn.cards.push(movedCard)
+      }
     }
   }
 })
@@ -135,5 +155,5 @@ export const {
   updateCard,
   deleteCard,
   moveCard,
-  updateColumnTitle // ← экспортируем новый редьюсер
+  updateColumnTitle
 } = boardSlice.actions

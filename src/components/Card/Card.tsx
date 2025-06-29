@@ -1,6 +1,6 @@
 import EditIcon from '@components/Icons/EditIcon'
 import TrashIcon from '@components/Icons/TrashIcon'
-import React, { useState } from 'react'
+import React from 'react'
 
 import {
   CardActionButton,
@@ -19,7 +19,7 @@ interface CardProps {
   priority?: 'low' | 'medium' | 'high'
   onEdit?: () => void
   onDelete?: () => void
-  onMouseDown?: (e: React.MouseEvent) => void
+  onTouchStart?: (e: React.TouchEvent<HTMLDivElement>) => void
   onDragStart?: (e: React.DragEvent<HTMLDivElement>) => void
 }
 
@@ -35,18 +35,11 @@ const Card: React.FC<CardProps> = ({
   priority,
   onEdit,
   onDelete,
-  onMouseDown,
-  onDragStart // добавлено
+  onDragStart,
+  onTouchStart
 }) => {
-  const [isHovered, setIsHovered] = useState(false)
-
   return (
-    <CardWrapper
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      onMouseDown={onMouseDown}
-      onDragStart={onDragStart} // добавлено
-    >
+    <CardWrapper draggable onDragStart={onDragStart} onTouchStart={onTouchStart}>
       {priority && (
         <PriorityBadge color={priorityColors[priority].text} bgColor={priorityColors[priority].bg}>
           {priority}
@@ -56,18 +49,16 @@ const Card: React.FC<CardProps> = ({
       <CardTitle>{title}</CardTitle>
       <CardDescription>{description}</CardDescription>
 
-      {isHovered && (
-        <CardActions>
-          <CardActionButton onClick={onEdit} variant="edit" aria-label="Edit">
-            <EditIcon />
-            <span className="label">Edit card</span>
-          </CardActionButton>
-          <CardActionButton onClick={onDelete} variant="delete" aria-label="Delete">
-            <TrashIcon />
-            <span className="label">Delete card</span>
-          </CardActionButton>
-        </CardActions>
-      )}
+      <CardActions>
+        <CardActionButton onClick={onEdit} variant="edit" aria-label="Edit">
+          <EditIcon />
+          <span className="label">Edit card</span>
+        </CardActionButton>
+        <CardActionButton onClick={onDelete} variant="delete" aria-label="Delete">
+          <TrashIcon />
+          <span className="label">Delete card</span>
+        </CardActionButton>
+      </CardActions>
     </CardWrapper>
   )
 }

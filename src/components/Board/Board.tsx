@@ -8,6 +8,10 @@ const Board = () => {
   const columns = useAppSelector((state) => state.board.columns)
   const dispatch = useAppDispatch()
 
+  const handleDeleteColumn = (columnId: string) => {
+    dispatch(deleteColumn(columnId))
+  }
+
   return (
     <BoardWrapper>
       {columns.map((column) => (
@@ -16,8 +20,8 @@ const Board = () => {
           columnId={column.id}
           title={column.title}
           color={column.color}
-          cards={column.cards} // ← вот тут больше нет подстановки 'low'
-          onDelete={() => dispatch(deleteColumn(column.id))}
+          cards={column.cards}
+          onDelete={() => handleDeleteColumn(column.id)}
         />
       ))}
     </BoardWrapper>
