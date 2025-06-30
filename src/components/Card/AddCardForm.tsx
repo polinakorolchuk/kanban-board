@@ -1,3 +1,4 @@
+import { PRIORITY_OPTIONS } from '@constants/Form'
 import { addCard, updateCard } from '@store/reducers/BoardSlice'
 import { AddCardFormProps, Card } from '@store/types/BoardTypes'
 import React, { useEffect, useState } from 'react'
@@ -14,13 +15,6 @@ import {
   SubmitButton,
   VisuallyHiddenText
 } from './styled'
-
-const PRIORITY_OPTIONS = [
-  { label: 'No Priority', value: '' },
-  { label: 'Low', value: 'low' },
-  { label: 'Medium', value: 'medium' },
-  { label: 'High', value: 'high' }
-] as const
 
 const AddCardForm: React.FC<AddCardFormProps> = ({ columnId, onCancel, initialData, onSave }) => {
   const dispatch = useDispatch()
