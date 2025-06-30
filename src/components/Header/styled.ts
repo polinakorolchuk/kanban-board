@@ -3,11 +3,13 @@ import styled from 'styled-components'
 export const HeaderWrapper = styled.header`
   position: relative;
   width: 100%;
-  background-color: #f8fafc;
-  border-bottom: 1px solid #f8fafc;
+  background-color: ${({ theme }) => theme.headerBackground};
+
+  /* Удалить эту строку: */
+  /* border-bottom: 1px solid ${({ theme }) => theme.cardBorder}; */
 
   @media (max-width: 390px) {
-    background-color: #ffffff;
+    background-color: ${({ theme }) => theme.headerBackground};
   }
 `
 
@@ -59,7 +61,7 @@ export const Logo = styled.h1`
   font-family: 'Plus Jakarta Sans', sans-serif;
   transform: scaleY(0.98);
   transform-origin: bottom;
-  color: #1e293b;
+  color: ${({ theme }) => theme.text};
 
   @media (max-width: 390px) {
     display: none;
@@ -70,10 +72,10 @@ export const AddColumnButton = styled.button`
   width: 40px;
   height: 40px;
 
-  background-color: #f8fafc;
-  border: 1px solid #cbd5e1;
+  background-color: ${({ theme }) => theme.cardBackground};
+  border: 1px solid ${({ theme }) => theme.cardBorder};
   border-radius: 50%;
-  color: #475569;
+  color: ${({ theme }) => theme.text};
   font-size: 20px;
   font-weight: 500;
   cursor: pointer;
@@ -87,20 +89,21 @@ export const AddColumnButton = styled.button`
     border-color 0.2s ease;
 
   &:hover {
-    background-color: #e2e8f0;
-    border-color: #94a3b8;
+    background-color: ${({ theme }) => theme.primaryColor};
+    border-color: ${({ theme }) => theme.primaryColor};
+    color: #fff;
   }
 `
 
 export const BurgerButton = styled.button`
   width: 40px;
   height: 40px;
-  background-color: #f8fafc;
-  border: 1px solid #cbd5e1;
+  background-color: ${({ theme }) => theme.cardBackground};
+  border: 1px solid ${({ theme }) => theme.cardBorder};
   border-radius: 8px;
   font-size: 22px;
   cursor: pointer;
-  color: #475569;
+  color: ${({ theme }) => theme.text};
 
   display: flex;
   align-items: center;
@@ -111,8 +114,9 @@ export const BurgerButton = styled.button`
     border-color 0.2s ease;
 
   &:hover {
-    background-color: #e2e8f0;
-    border-color: #94a3b8;
+    background-color: ${({ theme }) => theme.primaryColor};
+    border-color: ${({ theme }) => theme.primaryColor};
+    color: #fff;
   }
 `
 
@@ -131,14 +135,14 @@ export const MobileActions = styled.div`
   z-index: 999;
 
   button {
-    background-color: #f8fafc;
-    border: 1px solid #cbd5e1;
+    background-color: ${({ theme }) => theme.cardBackground};
+    border: 1px solid ${({ theme }) => theme.cardBorder};
     border-radius: 6px;
     font-size: 14px;
     padding: 4px 10px;
     min-width: 130px;
     white-space: nowrap;
-    color: #475569;
+    color: ${({ theme }) => theme.text};
     cursor: pointer;
 
     display: flex;
@@ -150,8 +154,9 @@ export const MobileActions = styled.div`
       border-color 0.2s ease;
 
     &:hover {
-      background-color: #f8fafc;
-      border-color: #94a3b8;
+      background-color: ${({ theme }) => theme.primaryColor};
+      border-color: ${({ theme }) => theme.primaryColor};
+      color: #fff;
     }
   }
 `

@@ -1,25 +1,33 @@
 import { useTheme } from '@hooks/UseTheme'
 import React from 'react'
 
+import { ThemeButton, ThemeSwitcherWrapper } from './styled'
+
 const ThemeSwitcher: React.FC = () => {
   const { themeName, setThemeName } = useTheme()
 
   return (
-    <div style={{ marginBottom: 16 }}>
-      <button type="button" disabled={themeName === 'light'} onClick={() => setThemeName('light')}>
-        Light
-      </button>
-      <button type="button" disabled={themeName === 'dark'} onClick={() => setThemeName('dark')}>
-        Dark
-      </button>
-      <button
+    <ThemeSwitcherWrapper>
+      <ThemeButton
         type="button"
-        disabled={themeName === 'colorful'}
+        active={themeName === 'light'}
+        onClick={() => setThemeName('light')}
+      >
+        Light
+      </ThemeButton>
+
+      <ThemeButton type="button" active={themeName === 'dark'} onClick={() => setThemeName('dark')}>
+        Dark
+      </ThemeButton>
+
+      <ThemeButton
+        type="button"
+        active={themeName === 'colorful'}
         onClick={() => setThemeName('colorful')}
       >
         Colorful
-      </button>
-    </div>
+      </ThemeButton>
+    </ThemeSwitcherWrapper>
   )
 }
 

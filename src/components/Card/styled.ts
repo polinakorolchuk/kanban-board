@@ -130,7 +130,7 @@ export const PriorityBadge = styled.span<{ color: string; bgColor: string }>`
 `
 
 export const FormWrapper = styled.div`
-  background-color: #ffffff;
+  background-color: ${({ theme }) => theme.cardBackground};
   border-radius: 12px;
   padding: 12px;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
@@ -139,40 +139,17 @@ export const FormWrapper = styled.div`
   gap: 8px;
   margin-top: 8px;
   font-family: 'Plus Jakarta Sans', sans-serif;
+  color: ${({ theme }) => theme.text};
 `
 
 export const FormInput = styled.input`
   padding: 8px;
   border-radius: 6px;
-  border: 1px solid #d1d5db;
+  border: 1px solid ${({ theme }) => theme.cardBorder};
   font-size: 0.875rem;
   font-family: 'Plus Jakarta Sans', sans-serif;
-`
-
-export const FormTextarea = styled.textarea`
-  width: 98%;
-  padding: 2px;
-  border-radius: 6px;
-  border: 1px solid #d1d5db;
-  font-size: 0.875rem;
-  resize: vertical;
-  font-family: 'Plus Jakarta Sans', sans-serif;
-`
-
-export const FormSelect = styled.select`
-  padding: 8px 2.5rem 8px 8px;
-  border-radius: 6px;
-  border: 1px solid #d1d5db;
-  font-size: 0.875rem;
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  background-color: #f8fafc;
-  color: #1f2937;
-  appearance: none;
-
-  background-image: url("data:image/svg+xml,%3Csvg fill='none' stroke='gray' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 0.75rem center;
-  background-size: 1rem;
+  background-color: ${({ theme }) => theme.cardBackground};
+  color: ${({ theme }) => theme.text};
 `
 
 export const FormActions = styled.div`
@@ -181,19 +158,59 @@ export const FormActions = styled.div`
   gap: 8px;
 `
 
+export const FormTextarea = styled.textarea`
+  width: 98%;
+  padding: 2px;
+  border-radius: 6px;
+  border: 1px solid ${({ theme }) => theme.cardBorder};
+  font-size: 0.875rem;
+  resize: vertical;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background-color: ${({ theme }) => theme.cardBackground};
+  color: ${({ theme }) => theme.text};
+`
+
+export const FormSelect = styled.select`
+  padding: 8px 2.5rem 8px 8px;
+  border-radius: 6px;
+  border: 1px solid ${({ theme }) => theme.cardBorder};
+  font-size: 0.875rem;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background-color: ${({ theme }) => theme.cardBackground};
+  color: ${({ theme }) => theme.text};
+  appearance: none;
+  min-height: 36px;
+  width: 100%;
+  cursor: pointer;
+
+  background-image: url("data:image/svg+xml,%3Csvg fill='%23666666' stroke='%23666666' stroke-width='2' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 1rem;
+
+  &:focus {
+    outline: 2px solid ${({ theme }) => theme.focusOutline || '#3b82f6'};
+    outline-offset: 2px;
+  }
+
+  @supports (-moz-appearance: none) {
+    padding-right: 1rem;
+  }
+`
+
 export const SubmitButton = styled.button`
   padding: 6px 12px;
   font-size: 0.875rem;
   font-weight: 600;
   font-family: 'Plus Jakarta Sans', sans-serif;
-  background-color: #22c55e;
-  color: white;
+  background-color: ${({ theme }) => theme.addButtonBackground};
+  color: ${({ theme }) => theme.addButtonText};
   border: none;
   border-radius: 8px;
   cursor: pointer;
 
   &:hover {
-    background-color: #16a34a;
+    opacity: 0.9;
   }
 `
 
@@ -202,13 +219,32 @@ export const CancelButton = styled.button`
   font-size: 0.875rem;
   font-weight: 600;
   font-family: 'Plus Jakarta Sans', sans-serif;
-  background-color: #f87171;
+  background-color: ${({ theme }) => theme.cancelButtonBackground};
   color: white;
   border: none;
   border-radius: 8px;
   cursor: pointer;
 
   &:hover {
-    background-color: #ef4444;
+    background-color: ${({ theme }) => theme.cancelButtonHover};
   }
+`
+export const FormLabel = styled.label`
+  font-size: 0.75rem;
+  font-weight: 600;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  margin-bottom: 4px;
+  display: block;
+  color: ${({ theme }) => theme.text};
+`
+export const VisuallyHiddenText = styled.span`
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 `

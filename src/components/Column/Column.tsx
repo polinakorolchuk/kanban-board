@@ -107,7 +107,7 @@ const Column = ({ columnId, title, color, cards = [], onDelete }: ColumnProps) =
   }
 
   const handleTouchStart = (
-    _: React.TouchEvent<HTMLDivElement>, // '_' вместо 'e' — чтобы избежать ошибки TS
+    _: React.TouchEvent<HTMLDivElement>,
     cardId: number,
     sourceColumnId: string
   ) => {

@@ -1,4 +1,5 @@
-import { addCard, Card, updateCard } from '@store/reducers/BoardSlice'
+import { addCard, updateCard } from '@store/reducers/BoardSlice'
+import { AddCardFormProps, Card } from '@store/types/BoardTypes'
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 
@@ -6,18 +7,20 @@ import {
   CancelButton,
   FormActions,
   FormInput,
+  FormLabel,
   FormSelect,
   FormTextarea,
   FormWrapper,
-  SubmitButton
+  SubmitButton,
+  VisuallyHiddenText
 } from './styled'
 
-interface AddCardFormProps {
-  columnId: string
-  onCancel?: () => void
-  initialData?: Card
-  onSave?: () => void
-}
+const PRIORITY_OPTIONS = [
+  { label: 'No Priority', value: '' },
+  { label: 'Low', value: 'low' },
+  { label: 'Medium', value: 'medium' },
+  { label: 'High', value: 'high' }
+] as const
 
 const AddCardForm: React.FC<AddCardFormProps> = ({ columnId, onCancel, initialData, onSave }) => {
   const dispatch = useDispatch()
@@ -52,30 +55,21 @@ const AddCardForm: React.FC<AddCardFormProps> = ({ columnId, onCancel, initialDa
           }
         })
       )
-      if (onSave) onSave()
+      onSave?.()
     } else {
       const newCard: Card = {
         id: Date.now(),
         title,
-        description
+        description,
+        ...(priority && { priority })
       }
-
-      if (priority !== '') {
-        newCard.priority = priority
-      }
-
-      dispatch(
-        addCard({
-          columnId,
-          card: newCard
-        })
-      )
+      dispatch(addCard({ columnId, card: newCard }))
     }
 
     setTitle('')
     setDescription('')
     setPriority('')
-    if (onCancel) onCancel()
+    onCancel?.()
   }
 
   return (
@@ -85,32 +79,43 @@ const AddCardForm: React.FC<AddCardFormProps> = ({ columnId, onCancel, initialDa
         onChange={(e) => setTitle(e.target.value)}
         placeholder="Title"
         required
+        aria-label="Task title"
       />
 
       <FormTextarea
         value={description}
         onChange={(e) => setDescription(e.target.value)}
         placeholder="Description"
+        aria-label="Task description"
       />
 
-      <div>
+      <div role="group" aria-labelledby="priority-label">
+        <FormLabel id="priority-label" htmlFor="priority">
+          Priority
+        </FormLabel>
         <FormSelect
           id="priority"
           name="priority"
           value={priority}
-          onChange={(e) => setPriority(e.target.value as 'low' | 'medium' | 'high' | '')}
+          onChange={(e) => setPriority(e.target.value as typeof priority)}
+          aria-labelledby="priority-label"
+          aria-describedby="priority-help"
         >
-          <option value="">No Priority</option>
-          <option value="low">Low</option>
-          <option value="medium">Medium</option>
-          <option value="high">High</option>
+          {PRIORITY_OPTIONS.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
         </FormSelect>
+        <VisuallyHiddenText id="priority-help">Select task priority level</VisuallyHiddenText>
       </div>
 
       <FormActions>
-        <SubmitButton type="submit">{isEditMode ? 'Save' : 'Add'}</SubmitButton>
+        <SubmitButton type="submit" aria-label={isEditMode ? 'Save changes' : 'Add new card'}>
+          {isEditMode ? 'Save' : 'Add'}
+        </SubmitButton>
         {onCancel && (
-          <CancelButton type="button" onClick={onCancel}>
+          <CancelButton type="button" onClick={onCancel} aria-label="Cancel editing">
             Cancel
           </CancelButton>
         )}

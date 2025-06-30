@@ -1,4 +1,4 @@
-import { styled } from 'styled-components'
+import styled from 'styled-components'
 
 export const BoardWrapper = styled.div`
   display: flex;
@@ -7,11 +7,10 @@ export const BoardWrapper = styled.div`
   padding: 1rem;
   overflow-x: auto;
   overflow-y: hidden;
-  background-color: #ffffff;
+  background-color: ${({ theme }) => theme.boardBackground};
   height: calc(100vh - 64px);
   box-sizing: border-box;
 
-  // для плавного скролла на touch-устройствах
   -webkit-overflow-scrolling: touch;
   scroll-behavior: smooth;
 

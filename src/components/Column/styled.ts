@@ -5,7 +5,7 @@ export const BoardWrapper = styled.div`
   gap: 1rem;
   padding: 1rem;
   overflow-x: auto;
-  background-color: #f8fafc;
+  background-color: ${({ theme }) => theme.boardBackground};
   min-height: 100vh;
 `
 
@@ -24,7 +24,7 @@ export const ColumnWrapper = styled.div`
 `
 
 export const ColumnContent = styled.div`
-  background-color: #f8fafc;
+  background-color: ${({ theme }) => theme.columnBackground};
   border-radius: 42px;
   padding: 1rem;
   display: flex;
@@ -33,9 +33,9 @@ export const ColumnContent = styled.div`
 
   width: 100%;
   box-sizing: border-box;
+
   @media (max-width: 390px) {
     width: 100%;
-    background-color: #f1f5f9;
   }
 `
 
@@ -60,7 +60,8 @@ export const ColumnTitle = styled.div<ColumnTitleProps>`
   transform: scaleY(0.95);
   transform-origin: bottom;
 
-  color: white;
+  color: ${({ theme }) => theme.text};
+
   padding: 8px;
   margin-bottom: 0.5rem;
 
@@ -98,19 +99,22 @@ export const TitleWithBadge = styled.div`
   align-items: center;
 `
 
+interface TaskCountBadgeProps {
+  bgColor: string
+}
+
 function hexToRgba(hex: string, alpha: number) {
   const r = parseInt(hex.slice(1, 3), 16)
   const g = parseInt(hex.slice(3, 5), 16)
   const b = parseInt(hex.slice(5, 7), 16)
-
   return `rgba(${r}, ${g}, ${b}, ${alpha})`
 }
 
-export const TaskCountBadge = styled.div<ColumnTitleProps>`
+export const TaskCountBadge = styled.div<TaskCountBadgeProps>`
   width: 32px;
   height: 32px;
-  background-color: white;
-  color: ${({ bgColor }) => (bgColor ? `${hexToRgba(bgColor, 0.3)}` : 'rgba(15, 23, 42, 0.6)')};
+  background-color: ${({ theme }) => theme.taskCountBadgeBackground};
+  color: ${({ bgColor }) => hexToRgba(bgColor, 0.7)};
   font-family: 'Plus Jakarta Sans', sans-serif;
   font-size: 18px;
   font-weight: 300;
@@ -135,9 +139,10 @@ export const AddTaskPlaceholder = styled.div<ColorProps>`
   padding: 8px;
   margin-top: 0.15rem;
 
-  border: 1.5px solid #e2e8f0;
+  border: 1.5px solid ${({ theme }) => theme.cardBorder};
   border-radius: 9999px;
-  background-color: white;
+  background-color: ${({ theme }) => theme.cardBackground};
+  color: ${({ theme }) => theme.text};
   width: 100%;
 
   box-sizing: border-box;
@@ -154,6 +159,7 @@ export const AddTaskPlaceholder = styled.div<ColorProps>`
     font-family: 'Plus Jakarta Sans', sans-serif;
   }
 `
+
 export const EditableInput = styled.input`
   font-size: 1rem;
   padding: 2px 6px;
@@ -166,7 +172,9 @@ export const EditableInput = styled.input`
 export const EditableTitle = styled.span`
   cursor: pointer;
   font-family: 'Plus Jakarta Sans', sans-serif;
+  color: ${({ theme }) => theme.columnTitleText};
 `
+
 export const DeleteColumnButton = styled.button`
   background: none;
   color: #ef4444;
